@@ -25,12 +25,9 @@ public class MatrixSweeper {
       
       // Main loop
       while (gameOn) {
+         //printBoard(heatmap);
          padLen = (topBoard.length) - (7 + String.valueOf(flagsLeft).length());
-         System.out.printf("Flags: " + flagsLeft + " ");
-         for (int i=0; i<padLen; i++)
-            System.out.print(" ");
-         System.out.println(":D");
-         printBoard(topBoard);
+         printBoard(topBoard, flagsLeft, padLen, ":)");
          System.out.print(">>> ");
          String userInput = input.nextLine();
          System.out.println();
@@ -50,7 +47,7 @@ public class MatrixSweeper {
                if (heatmap[Integer.valueOf(inputs[1])][Integer.valueOf(inputs[0])] == 'X') {
                   minesFlagged++;
                   flagsLeft--;
-               }   
+               }
                else {
                   flagsLeft--;
                }
@@ -69,8 +66,7 @@ public class MatrixSweeper {
             
             // Victory
             if (minesFlagged == totalMines) {
-               System.out.printf("Mines: " + flagsLeft + "        :D\n");
-               printBoard(topBoard);
+               printBoard(topBoard, flagsLeft, padLen, ":D");
                break;
             }
             continue;
@@ -92,9 +88,8 @@ public class MatrixSweeper {
          
          // Game Over         
          if (heatmap[Integer.valueOf(inputs[1])][Integer.valueOf(inputs[0])] == 'X' && topBoard[Integer.valueOf(inputs[1])][Integer.valueOf(inputs[0])] != 'f' && digs != 1) {
-            System.out.println("Flags: " + flagsLeft + "        X(");
             showMines(topBoard, heatmap);
-            printBoard(topBoard);
+            printBoard(topBoard, flagsLeft, padLen, "X(");
             gameOn = false;
          }
          if (userInput.equals("exit"))
@@ -139,8 +134,7 @@ public class MatrixSweeper {
       while (heat[row][column] == 'X') {
          shuffleMatrix(mines);
          System.out.println("Creating another heatmap");
-         
-          heat = createHeatmap(mines, adjTiles);
+         heat = createHeatmap(mines, adjTiles);
       }
       digHere(top, heat, adjTiles, row, column);
 
@@ -244,7 +238,16 @@ public class MatrixSweeper {
          }
       }
    }
-
+   
+   // This would have been repeated three times in main loop
+   public static void printBoard(char[][] board, int flags, int pad, String face) {
+      System.out.printf("Flags: " + flags + " ");
+      for (int i=0; i<pad; i++)
+         System.out.print(" ");
+      System.out.println(face);
+      printBoard(board);
+   }
+   
    public static void printBoard(char[][] board) {
       for (int row=board.length-1; row>=0; row--) {
          System.out.printf("%2s", row);
