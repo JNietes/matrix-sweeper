@@ -25,8 +25,6 @@ public class MatrixSweeper {
       
       // Main loop
       while (gameOn) {
-         printBoard(mineBoard);
-         printBoard(heatmap);
          padLen = (topBoard.length) - (7 + String.valueOf(flagsLeft).length());
          System.out.printf("Flags: " + flagsLeft + " ");
          for (int i=0; i<padLen; i++)
@@ -82,7 +80,6 @@ public class MatrixSweeper {
          if (topBoard[Integer.valueOf(inputs[1])][Integer.valueOf(inputs[0])] == ' ') {
             if (validCoordinate(topBoard, inputs) && digs == 0) {
                firstDig(topBoard, mineBoard, heatmap, coolMatrix, Integer.valueOf(inputs[1]), Integer.valueOf(inputs[0]));
-               printBoard(heatmap);
                digs++;
             }
             else {
