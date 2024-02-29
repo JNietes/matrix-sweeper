@@ -24,7 +24,6 @@ public class MatrixSweeper {
 
       // Main loop
       while (gameOn) {
-         printBoard(heatmap);
          padLen = (topBoard.length) - (7 + String.valueOf(flagsLeft).length());
          printBoard(topBoard, flagsLeft, padLen, ":)");
          System.out.print(">>> ");
