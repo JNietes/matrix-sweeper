@@ -24,7 +24,6 @@ public class MatrixSweeper {
 
       // Main loop
       while (gameOn) {
-         //printBoard(heatmap);
          padLen = (topBoard.length) - (7 + String.valueOf(flagsLeft).length());
          printBoard(topBoard, flagsLeft, padLen, ":)");
          System.out.print(">>> ");
@@ -66,8 +65,10 @@ public class MatrixSweeper {
 
          // Digging
          if (topBoard[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == ' ') {
-            if (validCoordinate(topBoard, inputs) && digs == 0)
+            if (validCoordinate(topBoard, inputs) && digs == 0) {
                firstDig(topBoard, mineBoard, heatmap, coolMatrix, Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
+               heatmap = createHeatmap(mineBoard, coolMatrix);
+            }
             else
                digHere(topBoard, heatmap, coolMatrix, Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
             digs++;
