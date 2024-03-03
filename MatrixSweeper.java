@@ -28,9 +28,44 @@ public class MatrixSweeper {
          System.out.println();
          String[] inputs = userInput.split(" ");
 
-         // Editing board size
          if (inputs[0].equals("help")) {
             printHelp();
+            continue;
+         }
+
+         // Hard coded difficulties
+         if (inputs[0].equals("difficulty")) {
+            System.out.print(">>> difficulty: ");
+            inputs = input.nextLine().split(" ");
+             switch (inputs[0]) {
+                 case "beginner" -> {
+                     digs = 0;
+                     totalMines = 10;
+                     flagsLeft = totalMines;
+                     topBoard = createTopBoard(9, 9);
+                     mineBoard = createMineBoard(9, 9, totalMines);
+                     heatmap = createHeatmap(mineBoard, coolMatrix);
+                 }
+                 case "intermediate" -> {
+                     digs = 0;
+                     totalMines = 40;
+                     flagsLeft = totalMines;
+                     topBoard = createTopBoard(16, 16);
+                     mineBoard = createMineBoard(16, 16, totalMines);
+                     heatmap = createHeatmap(mineBoard, coolMatrix);
+                 }
+                 case "expert" -> {
+                     digs = 0;
+                     totalMines = 99;
+                     flagsLeft = totalMines;
+                     topBoard = createTopBoard(16, 30);
+                     mineBoard = createMineBoard(16, 30, totalMines);
+                     heatmap = createHeatmap(mineBoard, coolMatrix);
+                 }
+                 case "custom" -> System.out.println("not implemented yet");
+                 default -> System.out.println(">>> enter \"help\" for difficulties");
+             }
+
             continue;
          }
 
