@@ -16,11 +16,10 @@ public class MatrixSweeper {
       char[][] topBoard = createTopBoard(16, 30); // Can modify
       char[][] mineBoard = createMineBoard(topBoard.length, topBoard[0].length, totalMines);
       char[][] heatmap = createHeatmap(mineBoard, coolMatrix);
-      boolean gameOn = true;
       int padLen;
 
       // Main loop
-      while (gameOn) {
+      while (true) {
          padLen = (topBoard[0].length) - (7 + String.valueOf(flagsLeft).length());
          printBoard(topBoard, flagsLeft, padLen, ":)");
          System.out.print(">>> ");
@@ -33,7 +32,12 @@ public class MatrixSweeper {
             continue;
          }
 
+         if (inputs[0].equals("exit")) {
+            break;
+         }
+
          // Hard coded difficulties
+         // Creating a board object would make the cases much shorter. board = new MatrixSweeperBoard(rows, columns, mines)
          if (inputs[0].equals("difficulty")) {
             System.out.print(">>> difficulty: ");
             inputs = input.nextLine().split(" ");
@@ -62,7 +66,16 @@ public class MatrixSweeper {
                      mineBoard = createMineBoard(16, 30, totalMines);
                      heatmap = createHeatmap(mineBoard, coolMatrix);
                  }
-                 case "custom" -> System.out.println("not implemented yet");
+                 case "custom" -> {
+                    System.out.print(">>> enter \"column\" \"rows\" \"mines\": ");
+                    inputs = input.nextLine().split(" ");
+                    digs = 0;
+                    totalMines = Integer.parseInt(inputs[2]);
+                    flagsLeft = totalMines;
+                    topBoard = createTopBoard(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
+                    mineBoard = createMineBoard(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]), Integer.parseInt(inputs[2]));
+                    heatmap = createHeatmap(mineBoard, coolMatrix);
+                 }
                  default -> System.out.println(">>> enter \"help\" for difficulties");
              }
 
@@ -118,10 +131,18 @@ public class MatrixSweeper {
          if (heatmap[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == 'X' && topBoard[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] != 'f' && digs != 1) {
             showMines(topBoard, heatmap);
             printBoard(topBoard, flagsLeft, padLen, "X(");
-            gameOn = false;
+            System.out.print("Keep playing? \"yes\" or \"no\": ");
+            if (input.nextLine().equals("yes")) {
+               digs = 0;
+               totalMines = 99; // Can modify
+               flagsLeft = totalMines;
+               topBoard = createTopBoard(16, 30); // Can modify
+               mineBoard = createMineBoard(topBoard.length, topBoard[0].length, totalMines);
+               heatmap = createHeatmap(mineBoard, coolMatrix);
+            }
+            else
+               break;
          }
-         if (userInput.equals("exit"))
-            gameOn = false;
       }
       System.out.println("Thanks for playing!");
    }
