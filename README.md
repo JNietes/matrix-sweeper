@@ -1,5 +1,6 @@
 # Matrix Sweeper
-A fully functional version of minesweeper that uses characters instead of a gui. 
+A version of minesweeper that uses characters instead of a gui. 
+Missing features: timer, question mark
 
 ## How to Play
 Enter coordinated with the syntax: x y
@@ -22,4 +23,4 @@ java MatrixSweeper
 ```
 
 ## Bugs
-If the first dig is a mine, the heatMap reference variable is not updated to the new matrix for a heatmap created in the firstDig method.
+(fixed) If the first dig is a mine, the heatMap reference variable is not updated to the new matrix for a heatmap created in the firstDig method.
