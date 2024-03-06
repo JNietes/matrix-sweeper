@@ -9,11 +9,10 @@ public class MatrixSweeper {
       // My solution to prevent 8 if statements when checking adj elements on a matrix
       int[][] coolMatrix = {{1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}, {1, 0}};
 
-      int digs = 0;
+      MatrixSweeperBoard board = new MatrixSweeperBoard();
       int totalMines = 99; // Can modify
       int flagsLeft = totalMines;
-      int minesFlagged = 0;
-      MatrixSweeperBoard board = new MatrixSweeperBoard();
+      boolean firstDig = true;
       int padLen;
 
       // Main loop
@@ -41,30 +40,30 @@ public class MatrixSweeper {
             inputs = input.nextLine().split(" ");
              switch (inputs[0]) {
                  case "beginner" -> {
-                     digs = 0;
+                     firstDig = true;
                      totalMines = 10;
                      flagsLeft = totalMines;
-                    board = new MatrixSweeperBoard(9, 9, totalMines);
+                     board = new MatrixSweeperBoard(9, 9, totalMines);
                  }
                  case "intermediate" -> {
-                     digs = 0;
+                     firstDig = true;
                      totalMines = 40;
                      flagsLeft = totalMines;
-                    board = new MatrixSweeperBoard(16, 16, totalMines);
+                     board = new MatrixSweeperBoard(16, 16, totalMines);
                  }
                  case "expert" -> {
-                     digs = 0;
+                     firstDig = true;
                      totalMines = 99;
                      flagsLeft = totalMines;
-                    board = new MatrixSweeperBoard(30, 16, totalMines);
+                     board = new MatrixSweeperBoard(16, 30, totalMines);
                  }
                  case "custom" -> {
-                    System.out.print(">>> enter \"column\" \"rows\" \"mines\": ");
-                    inputs = input.nextLine().split(" ");
-                    digs = 0;
-                    totalMines = Integer.parseInt(inputs[2]);
-                    flagsLeft = totalMines;
-                    board = new MatrixSweeperBoard( Integer.parseInt(inputs[1]),  Integer.parseInt(inputs[0]), Integer.parseInt(inputs[2]));
+                     System.out.print(">>> enter \"column\" \"rows\" \"mines\": ");
+                     inputs = input.nextLine().split(" ");
+                     firstDig = true;
+                     totalMines = Integer.parseInt(inputs[2]);
+                     flagsLeft = totalMines;
+                     board = new MatrixSweeperBoard( Integer.parseInt(inputs[1]),  Integer.parseInt(inputs[0]), Integer.parseInt(inputs[2]));
                  }
                  default -> System.out.println(">>> enter \"help\" for difficulties");
              }
@@ -82,22 +81,10 @@ public class MatrixSweeper {
                inputs = input.nextLine().split(" ");
                System.out.println();
             }
-            if (board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == ' ') {
-               if (board.getHeatmap()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == 'X')
-                  minesFlagged++;
-               flagsLeft--;
-               board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] = 'f';
-            }
-            else if (board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == 'f') {
-               if (board.getHeatmap()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == 'X') {
-                  minesFlagged--;
-               }
-               flagsLeft++;
-               board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] = ' ';
-            }
+            board.flagMineAt(Integer.parseInt(inputs[0]), Integer.parseInt(inputs[1]));
 
             // Victory
-            if (minesFlagged == totalMines) {
+            if (board.getMinesFlagged() == board.getTotalMines()) {
                board.printBoard(board.getTopBoard(), flagsLeft, padLen, ":D");
                break;
             }
@@ -106,24 +93,24 @@ public class MatrixSweeper {
 
          // Digging
          if (board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == ' ') {
-            if (validCoordinate(board.getTopBoard(), inputs) && digs == 0) {
+            if (validCoordinate(board.getTopBoard(), inputs) && firstDig) {
                board.firstDig(board.getTopBoard(), board.getMineBoard(), board.getHeatmap(), coolMatrix, Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
                board.createNewHeatmap();
             }
             else
                board.digHere(board.getTopBoard(), board.getHeatmap(), coolMatrix, Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
-            digs++;
+            firstDig = false;
          }
          else
             System.out.println("Cannot dig on flag");
 
          // Game Over
-         if (board.getHeatmap()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == 'X' && board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] != 'f' && digs != 1) {
+         if (board.getHeatmap()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == 'X' && board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] != 'f' && !firstDig) {
             board.showMines(board.getTopBoard(), board.getHeatmap());
             board.printBoard(board.getTopBoard(), flagsLeft, padLen, "X(");
             System.out.print("Keep playing? \"yes\" or \"no\": ");
             if (input.nextLine().equals("yes")) {
-               digs = 0;
+               firstDig = true;
                totalMines = 99; // Can modify
                flagsLeft = totalMines;
                board = new MatrixSweeperBoard();

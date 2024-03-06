@@ -1,4 +1,7 @@
 public class MatrixSweeperBoard {
+    int minesFlagged;
+    int flagsLeft;
+    int totalMines;
     int[][] coolMatrix = {{1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}, {1, 0}};
     char[][] topBoard;
     char[][] mineBoard;
@@ -7,11 +10,11 @@ public class MatrixSweeperBoard {
     MatrixSweeperBoard(){
         int rows = 16;
         int columns = 30;
-        topBoard = createTopBoard(rows, columns);
-        // Can modify
         int totalMines = 99;
         mineBoard = createMineBoard(rows, columns, totalMines);
         heatmap = createHeatmap(mineBoard, coolMatrix);
+        topBoard = createTopBoard(rows, columns);
+
     }
 
     MatrixSweeperBoard(int rowSize, int columnSize, int mines){
@@ -23,17 +26,33 @@ public class MatrixSweeperBoard {
     public char[][] getTopBoard() {
         return topBoard;
     }
-
     public char[][] getMineBoard() {
         return mineBoard;
     }
     public char[][] getHeatmap() {
         return heatmap;
     }
-
+    public int getMinesFlagged() { return minesFlagged; }
+    public int getTotalMines() { return totalMines; }
     public void createNewHeatmap() {
         shuffleMatrix(mineBoard);
         heatmap = createHeatmap(mineBoard, coolMatrix);
+    }
+
+    public void flagMineAt(int column, int row) {
+        if (topBoard[row][column] == ' ') {
+            if (heatmap[row][column] == 'X')
+                minesFlagged++;
+            flagsLeft--;
+            topBoard[row][column] = 'f';
+        }
+        else if (topBoard[row][column] == 'f') {
+            if (heatmap[row][column] == 'X') {
+                minesFlagged--;
+            }
+            flagsLeft++;
+            topBoard[row][column] = ' ';
+        }
     }
 
     public void showMines(char[][] top, char[][] heat) {
