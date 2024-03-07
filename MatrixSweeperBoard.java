@@ -1,5 +1,5 @@
 public class MatrixSweeperBoard {
-    int minesFlagged;
+    int minesFlagged=0;
     int flagsLeft;
     int totalMines;
     int[][] coolMatrix = {{1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}, {1, 0}};
@@ -10,7 +10,7 @@ public class MatrixSweeperBoard {
     MatrixSweeperBoard(){
         int rows = 16;
         int columns = 30;
-        int totalMines = 99;
+        totalMines = 99;
         mineBoard = createMineBoard(rows, columns, totalMines);
         heatmap = createHeatmap(mineBoard, coolMatrix);
         topBoard = createTopBoard(rows, columns);
