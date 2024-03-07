@@ -1,5 +1,5 @@
 public class MatrixSweeperBoard {
-    int minesFlagged=0;
+    int minesFlagged;
     int flagsLeft;
     int totalMines;
     int[][] coolMatrix = {{1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}, {1, 0}};
@@ -26,18 +26,12 @@ public class MatrixSweeperBoard {
     public char[][] getTopBoard() {
         return topBoard;
     }
-    public char[][] getMineBoard() {
-        return mineBoard;
-    }
+
     public char[][] getHeatmap() {
         return heatmap;
     }
     public int getMinesFlagged() { return minesFlagged; }
     public int getTotalMines() { return totalMines; }
-    public void createNewHeatmap() {
-        shuffleMatrix(mineBoard);
-        heatmap = createHeatmap(mineBoard, coolMatrix);
-    }
 
     public void flagMineAt(int column, int row) {
         if (topBoard[row][column] == ' ') {
@@ -87,13 +81,13 @@ public class MatrixSweeperBoard {
     }
 
     // Ensures the first dig is not a mine
-    public void firstDig(char[][] top, char[][] mines, char[][] heat, int[][] adjTiles, int row, int column) {
-        while (heat[row][column] == 'X') {
-            shuffleMatrix(mines);
-            //System.out.println("Creating another heatmap");
-            heat = createHeatmap(mines, adjTiles);
+    public void firstDig(int row, int column) {
+        while (heatmap[row][column] == 'X') {
+            shuffleMatrix(mineBoard);
+            System.out.println("Creating another heatmap");
+            heatmap = createHeatmap(mineBoard, coolMatrix);
         }
-        digHere(top, heat, adjTiles, row, column);
+        digHere(topBoard, heatmap, coolMatrix, row, column);
 
     }
 

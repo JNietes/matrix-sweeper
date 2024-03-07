@@ -84,8 +84,6 @@ public class MatrixSweeper {
             board.flagMineAt(Integer.parseInt(inputs[0]), Integer.parseInt(inputs[1]));
 
             // Victory
-             System.out.println(board.getMinesFlagged());
-             System.out.println(board.getTotalMines());
             if (board.getMinesFlagged() == board.getTotalMines()) {
                board.printBoard(board.getTopBoard(), flagsLeft, padLen, ":D");
                break;
@@ -97,8 +95,7 @@ public class MatrixSweeper {
          if (board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == ' ') {
              System.out.println(validCoordinate(board.getTopBoard(), inputs) && firstDig);
             if (validCoordinate(board.getTopBoard(), inputs) && firstDig) {
-               board.firstDig(board.getTopBoard(), board.getMineBoard(), board.getHeatmap(), coolMatrix, Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
-               board.createNewHeatmap();
+               board.firstDig(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
             }
             else
                board.digHere(board.getTopBoard(), board.getHeatmap(), coolMatrix, Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
