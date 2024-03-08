@@ -18,6 +18,7 @@ public class MatrixSweeperBoard {
     }
 
     MatrixSweeperBoard(int rowSize, int columnSize, int mines){
+        totalMines = mines;
         topBoard = createTopBoard(rowSize, columnSize);
         mineBoard = createMineBoard(rowSize, columnSize, mines);
         heatmap = createHeatmap(mineBoard, coolMatrix);
@@ -32,6 +33,8 @@ public class MatrixSweeperBoard {
     }
     public int getMinesFlagged() { return minesFlagged; }
     public int getTotalMines() { return totalMines; }
+
+    public int getFlagsLeft() { return flagsLeft; }
 
     public void flagMineAt(int column, int row) {
         if (topBoard[row][column] == ' ') {
@@ -161,8 +164,8 @@ public class MatrixSweeperBoard {
         else return column >= 0 && column <= mat[row].length - 1;
     }
 
-    public void printBoard(char[][] board, int flags, int pad, String face) {
-        System.out.printf("Flags: " + flags + " ");
+    public void printBoard(char[][] board, int pad, String face) {
+        System.out.printf("Flags: " + flagsLeft + " ");
         for (int i=0; i<pad; i++)
             System.out.print(" ");
         System.out.println(face);
