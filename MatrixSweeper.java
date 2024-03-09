@@ -10,15 +10,13 @@ public class MatrixSweeper {
       int[][] coolMatrix = {{1, 1}, {0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}, {1, 0}};
 
       MatrixSweeperBoard board = new MatrixSweeperBoard();
-      int totalMines = 99; // Can modify
-      int flagsLeft = totalMines;
       boolean firstDig = true;
       int padLen;
 
       // Main loop
       while (true) {
-         padLen = (board.getTopBoard()[0].length) - (7 + String.valueOf(flagsLeft).length());
-         board.printBoard(board.getTopBoard(), flagsLeft, padLen, ":)");
+         padLen = (board.getTopBoard()[0].length) - (7 + String.valueOf(board.getFlagsLeft()).length());
+         board.printBoard(board.getTopBoard(), padLen, ":)");
          System.out.print(">>> ");
          String userInput = input.nextLine();
          System.out.println();
@@ -41,28 +39,20 @@ public class MatrixSweeper {
              switch (inputs[0]) {
                  case "beginner" -> {
                      firstDig = true;
-                     totalMines = 10;
-                     flagsLeft = totalMines;
-                     board = new MatrixSweeperBoard(9, 9, totalMines);
+                     board = new MatrixSweeperBoard(9, 9, 10);
                  }
                  case "intermediate" -> {
                      firstDig = true;
-                     totalMines = 40;
-                     flagsLeft = totalMines;
-                     board = new MatrixSweeperBoard(16, 16, totalMines);
+                     board = new MatrixSweeperBoard(16, 16, 40);
                  }
                  case "expert" -> {
                      firstDig = true;
-                     totalMines = 99;
-                     flagsLeft = totalMines;
-                     board = new MatrixSweeperBoard(16, 30, totalMines);
+                     board = new MatrixSweeperBoard(16, 30, 99);
                  }
                  case "custom" -> {
                      System.out.print(">>> enter \"column\" \"rows\" \"mines\": ");
                      inputs = input.nextLine().split(" ");
                      firstDig = true;
-                     totalMines = Integer.parseInt(inputs[2]);
-                     flagsLeft = totalMines;
                      board = new MatrixSweeperBoard( Integer.parseInt(inputs[1]),  Integer.parseInt(inputs[0]), Integer.parseInt(inputs[2]));
                  }
                  default -> System.out.println(">>> enter \"help\" for difficulties");
@@ -85,7 +75,7 @@ public class MatrixSweeper {
 
             // Victory
             if (board.getMinesFlagged() == board.getTotalMines()) {
-               board.printBoard(board.getTopBoard(), flagsLeft, padLen, ":D");
+               board.printBoard(board.getTopBoard(), padLen, ":D");
                break;
             }
             continue;
@@ -93,9 +83,9 @@ public class MatrixSweeper {
 
          // Digging
          if (board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == ' ') {
+             System.out.println(validCoordinate(board.getTopBoard(), inputs) && firstDig);
             if (validCoordinate(board.getTopBoard(), inputs) && firstDig) {
-               board.firstDig(board.getTopBoard(), board.getMineBoard(), board.getHeatmap(), coolMatrix, Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
-               board.createNewHeatmap();
+               board.firstDig(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
             }
             else
                board.digHere(board.getTopBoard(), board.getHeatmap(), coolMatrix, Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
@@ -107,12 +97,10 @@ public class MatrixSweeper {
          // Game Over
          if (board.getHeatmap()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == 'X' && board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] != 'f' && !firstDig) {
             board.showMines(board.getTopBoard(), board.getHeatmap());
-            board.printBoard(board.getTopBoard(), flagsLeft, padLen, "X(");
+            board.printBoard(board.getTopBoard(), padLen, "X(");
             System.out.print("Keep playing? \"yes\" or \"no\": ");
             if (input.nextLine().equals("yes")) {
                firstDig = true;
-               totalMines = 99; // Can modify
-               flagsLeft = totalMines;
                board = new MatrixSweeperBoard();
             }
             else

@@ -8,19 +8,17 @@ To place a flag, enter the character f, then enter a coordinate.
 To exit the program, enter the string: exit
 
 ## How to Run
+Download the Java files into the same folder.
 Install [java](https://www.java.com/en/download/)
 
-To compile the program, open a terminal where the `MatrixSweeper.java` file is located. Then, type the following command:
+Open a terminal where the files are located then type the following command to compile.
 
 ```
 javac MatrixSweeper.java
 ```
 
-To execute the program, type the following command:
+To run the program, enter:
 
 ```
 java MatrixSweeper
 ```
-
-## Bugs
-(fixed) If the first dig is a mine, the heatMap reference variable is not updated to the new matrix for a heatmap created in the firstDig method.

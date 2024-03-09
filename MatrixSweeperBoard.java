@@ -10,7 +10,7 @@ public class MatrixSweeperBoard {
     MatrixSweeperBoard(){
         int rows = 16;
         int columns = 30;
-        int totalMines = 99;
+        totalMines = 99;
         mineBoard = createMineBoard(rows, columns, totalMines);
         heatmap = createHeatmap(mineBoard, coolMatrix);
         topBoard = createTopBoard(rows, columns);
@@ -18,6 +18,7 @@ public class MatrixSweeperBoard {
     }
 
     MatrixSweeperBoard(int rowSize, int columnSize, int mines){
+        totalMines = mines;
         topBoard = createTopBoard(rowSize, columnSize);
         mineBoard = createMineBoard(rowSize, columnSize, mines);
         heatmap = createHeatmap(mineBoard, coolMatrix);
@@ -26,18 +27,14 @@ public class MatrixSweeperBoard {
     public char[][] getTopBoard() {
         return topBoard;
     }
-    public char[][] getMineBoard() {
-        return mineBoard;
-    }
+
     public char[][] getHeatmap() {
         return heatmap;
     }
     public int getMinesFlagged() { return minesFlagged; }
     public int getTotalMines() { return totalMines; }
-    public void createNewHeatmap() {
-        shuffleMatrix(mineBoard);
-        heatmap = createHeatmap(mineBoard, coolMatrix);
-    }
+
+    public int getFlagsLeft() { return flagsLeft; }
 
     public void flagMineAt(int column, int row) {
         if (topBoard[row][column] == ' ') {
@@ -87,13 +84,13 @@ public class MatrixSweeperBoard {
     }
 
     // Ensures the first dig is not a mine
-    public void firstDig(char[][] top, char[][] mines, char[][] heat, int[][] adjTiles, int row, int column) {
-        while (heat[row][column] == 'X') {
-            shuffleMatrix(mines);
-            //System.out.println("Creating another heatmap");
-            heat = createHeatmap(mines, adjTiles);
+    public void firstDig(int row, int column) {
+        while (heatmap[row][column] == 'X') {
+            shuffleMatrix(mineBoard);
+            System.out.println("Creating another heatmap");
+            heatmap = createHeatmap(mineBoard, coolMatrix);
         }
-        digHere(top, heat, adjTiles, row, column);
+        digHere(topBoard, heatmap, coolMatrix, row, column);
 
     }
 
@@ -167,8 +164,8 @@ public class MatrixSweeperBoard {
         else return column >= 0 && column <= mat[row].length - 1;
     }
 
-    public void printBoard(char[][] board, int flags, int pad, String face) {
-        System.out.printf("Flags: " + flags + " ");
+    public void printBoard(char[][] board, int pad, String face) {
+        System.out.printf("Flags: " + flagsLeft + " ");
         for (int i=0; i<pad; i++)
             System.out.print(" ");
         System.out.println(face);
