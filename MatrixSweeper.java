@@ -62,16 +62,14 @@ public class MatrixSweeper {
          }
 
          // Flagging Mines
-         if (inputs[0].equals("f")) {
-            System.out.print(">>> f: ");
-            inputs = input.nextLine().split(" ");
-            while (!validCoordinate(board.getTopBoard(), inputs)) {
-               System.out.println("Please use the syntax \"column row\"");
+         if (inputs[0].equals("f") && inputs.length == 3) {
+            String[] coords = {inputs[1], inputs[2]};
+            while (!validCoordinate(board.getTopBoard(), coords)) {
+               System.out.println("Please use the syntax \"f column row\"");
                System.out.print(">>> f: ");
-               inputs = input.nextLine().split(" ");
                System.out.println();
             }
-            board.flagMineAt(Integer.parseInt(inputs[0]), Integer.parseInt(inputs[1]));
+            board.flagMineAt(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
 
             // Victory
             if (board.getMinesFlagged() == board.getTotalMines()) {
@@ -143,7 +141,7 @@ public class MatrixSweeper {
    public static void printHelp() {
       System.out.println(  "___---Matrix Mine Sweeper Commands---___\n\n" +
                            "To dig, enter a coordinate \"column row\"\n\n" +// Column, row is intuitive for the user (x, y)
-                           "To flag a mine, enter \"f\" and the coordinate\n\n"   +       // Row, column is intuitive for matrices
+                           "To flag a mine, enter \"f column row\"\n\n"   +       // Row, column is intuitive for matrices
                            "To change the difficulty, enter \"difficulty\",\n" +
                            "then \"beginner\", \"intermediate\", \"expert\", or \"custom\"\n\n" +
                            "To reprint these commands, enter \"help\"\n\n" +
