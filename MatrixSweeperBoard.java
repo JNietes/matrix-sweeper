@@ -11,6 +11,7 @@ public class MatrixSweeperBoard {
         int rows = 16;
         int columns = 30;
         totalMines = 99;
+        flagsLeft = totalMines;
         mineBoard = createMineBoard(rows, columns, totalMines);
         heatmap = createHeatmap(mineBoard, coolMatrix);
         topBoard = createTopBoard(rows, columns);
@@ -19,6 +20,7 @@ public class MatrixSweeperBoard {
 
     MatrixSweeperBoard(int rowSize, int columnSize, int mines){
         totalMines = mines;
+        flagsLeft = totalMines;
         topBoard = createTopBoard(rowSize, columnSize);
         mineBoard = createMineBoard(rowSize, columnSize, mines);
         heatmap = createHeatmap(mineBoard, coolMatrix);
@@ -87,7 +89,6 @@ public class MatrixSweeperBoard {
     public void firstDig(int row, int column) {
         while (heatmap[row][column] == 'X') {
             shuffleMatrix(mineBoard);
-            System.out.println("Creating another heatmap");
             heatmap = createHeatmap(mineBoard, coolMatrix);
         }
         digHere(topBoard, heatmap, coolMatrix, row, column);

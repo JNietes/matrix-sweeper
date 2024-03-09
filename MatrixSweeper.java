@@ -83,7 +83,6 @@ public class MatrixSweeper {
 
          // Digging
          if (board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == ' ') {
-             System.out.println(validCoordinate(board.getTopBoard(), inputs) && firstDig);
             if (validCoordinate(board.getTopBoard(), inputs) && firstDig) {
                board.firstDig(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
             }
