@@ -21,87 +21,86 @@ public class MatrixSweeper {
          String userInput = input.nextLine();
          System.out.println();
          String[] inputs = userInput.split(" ");
+         try {
+            if (inputs[0].equals("help")) {
+               printHelp();
+               continue;
+            } else if (inputs[0].equals("exit")) {
+               break;
+            }
 
-         if (inputs[0].equals("help")) {
-            printHelp();
-            continue;
-         }
-
-         if (inputs[0].equals("exit")) {
-            break;
-         }
-
-         // Hard coded difficulties
-         // Creating a board object would make the cases much shorter. board = new MatrixSweeperBoard(rows, columns, mines)
-         if (inputs[0].equals("difficulty")) {
-            System.out.print(">>> difficulty: ");
-            inputs = input.nextLine().split(" ");
-             switch (inputs[0]) {
-                 case "beginner" -> {
+            // Hard coded difficulties
+            // Creating a board object would make the cases much shorter. board = new MatrixSweeperBoard(rows, columns, mines)
+            if (inputs[0].equals("difficulty")) {
+               System.out.print(">>> difficulty: ");
+               inputs = input.nextLine().split(" ");
+               switch (inputs[0]) {
+                  case "beginner" -> {
                      firstDig = true;
                      board = new MatrixSweeperBoard(9, 9, 10);
-                 }
-                 case "intermediate" -> {
+                  }
+                  case "intermediate" -> {
                      firstDig = true;
                      board = new MatrixSweeperBoard(16, 16, 40);
-                 }
-                 case "expert" -> {
+                  }
+                  case "expert" -> {
                      firstDig = true;
                      board = new MatrixSweeperBoard(16, 30, 99);
-                 }
-                 case "custom" -> {
+                  }
+                  case "custom" -> {
                      System.out.print(">>> enter \"column\" \"rows\" \"mines\": ");
                      inputs = input.nextLine().split(" ");
                      firstDig = true;
-                     board = new MatrixSweeperBoard( Integer.parseInt(inputs[1]),  Integer.parseInt(inputs[0]), Integer.parseInt(inputs[2]));
-                 }
-                 default -> System.out.println(">>> enter \"help\" for difficulties");
-             }
+                     board = new MatrixSweeperBoard(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]), Integer.parseInt(inputs[2]));
+                  }
+                  default -> System.out.println(">>> enter \"help\" for difficulties");
+               }
 
-            continue;
+               continue;
+            }
+
+            // Flagging Mines
+            if (inputs[0].equals("f") && inputs.length == 3) {
+               String[] coords = {inputs[1], inputs[2]};
+               while (!validCoordinate(board.getTopBoard(), coords)) {
+                  System.out.println("Please use the syntax \"f column row\"");
+                  System.out.print(">>> f: ");
+                  System.out.println();
+               }
+               board.flagMineAt(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+
+               // Victory
+               if (board.getMinesFlagged() == board.getTotalMines()) {
+                  board.printBoard(board.getTopBoard(), padLen, ":D");
+                  break;
+               }
+               continue;
+            }
+
+            // Digging
+            if (board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == ' ') {
+               if (validCoordinate(board.getTopBoard(), inputs) && firstDig) {
+                  board.firstDig(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
+               } else
+                  board.digHere(board.getTopBoard(), board.getHeatmap(), coolMatrix, Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
+               firstDig = false;
+            } else
+               System.out.println("Cannot dig on flag");
+
+            // Game Over
+            if (board.getHeatmap()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == 'X' && board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] != 'f' && !firstDig) {
+               board.showMines(board.getTopBoard(), board.getHeatmap());
+               board.printBoard(board.getTopBoard(), padLen, "X(");
+               System.out.print("Keep playing? \"yes\" or \"no\": ");
+               if (input.nextLine().equals("yes")) {
+                  firstDig = true;
+                  board = new MatrixSweeperBoard();
+               } else
+                  break;
+            }
          }
-
-         // Flagging Mines
-         if (inputs[0].equals("f") && inputs.length == 3) {
-            String[] coords = {inputs[1], inputs[2]};
-            while (!validCoordinate(board.getTopBoard(), coords)) {
-               System.out.println("Please use the syntax \"f column row\"");
-               System.out.print(">>> f: ");
-               System.out.println();
-            }
-            board.flagMineAt(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
-
-            // Victory
-            if (board.getMinesFlagged() == board.getTotalMines()) {
-               board.printBoard(board.getTopBoard(), padLen, ":D");
-               break;
-            }
-            continue;
-         }
-
-         // Digging
-         if (board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == ' ') {
-            if (validCoordinate(board.getTopBoard(), inputs) && firstDig) {
-               board.firstDig(Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
-            }
-            else
-               board.digHere(board.getTopBoard(), board.getHeatmap(), coolMatrix, Integer.parseInt(inputs[1]), Integer.parseInt(inputs[0]));
-            firstDig = false;
-         }
-         else
-            System.out.println("Cannot dig on flag");
-
-         // Game Over
-         if (board.getHeatmap()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] == 'X' && board.getTopBoard()[Integer.parseInt(inputs[1])][Integer.parseInt(inputs[0])] != 'f' && !firstDig) {
-            board.showMines(board.getTopBoard(), board.getHeatmap());
-            board.printBoard(board.getTopBoard(), padLen, "X(");
-            System.out.print("Keep playing? \"yes\" or \"no\": ");
-            if (input.nextLine().equals("yes")) {
-               firstDig = true;
-               board = new MatrixSweeperBoard();
-            }
-            else
-               break;
+         catch (Exception e){
+            System.out.println(">>> Invalid Syntax");
          }
       }
       System.out.println("Thanks for playing!");
