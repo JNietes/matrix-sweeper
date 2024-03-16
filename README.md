@@ -9,15 +9,15 @@ To exit the program, enter the string: exit
 
 ## How to Run
 Download the Java files into the same folder.
-Install [java](https://www.java.com/en/download/)
+Install [Java JDK]([https://www.java.com/en/download/](https://www.oracle.com/java/technologies/downloads/)) for your operating system.
 
-Open a terminal where the files are located then type the following command to compile.
+Open a terminal where the files are located then type the following command to compile the Java file into bytecode
 
 ```
 javac MatrixSweeper.java
 ```
 
-To run the program, enter:
+Then enter this to run the bytecode in the Java Virtual Machine
 
 ```
 java MatrixSweeper
